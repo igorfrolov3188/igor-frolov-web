@@ -6,7 +6,7 @@ export function Footer() {
                 <p className='text-xs w-65'>Ministerstwo Spraw Wewnętrznych Zastępca Sekretariatu Stanu odpowiedzialny za prowadzenie dokumentacji</p>
             </div>
             <p className="text-xs text-muted-foreground">Wszystkie treści publikowane w serwisie są udostępniane na licencji Creative Commons: uznanie autorstwa - użycie niekomercyjne - bez utworów zależnych 3.0 Polska (CC BY-NC-ND 3.0 PL), o ile nie jest to stwierdzone inaczej.</p>
-            <div className="flex flex-row w-full justify-around">
+            <div className="flex flex-row w-full max-sm:flex-col justify-around">
                 <img src="fe-pc-left-pl.svg" alt="123" className="h-14 w-auto" />
                 <img src="polish-flag.svg" alt="345" className="h-14 w-auto" />
                 <img src="eu-flag.svg" alt="456" className="h-14 w-auto" />
