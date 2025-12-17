@@ -1,9 +1,7 @@
 'use client'
 
 import { useForm } from "@tanstack/react-form"
-import * as z from "zod"
 import { format } from "date-fns"
-
 import {
   Field,
   FieldLabel,
@@ -20,16 +18,22 @@ import {
   PopoverContent,
 } from "@/components/ui/popover"
 import { ChevronDownIcon } from "lucide-react"
-
-const formSchema = z.object({
-  license: z
-    .string("Wprowadź wartość.")
-    .min(11, "Liczba jest za krótka.")
-    .max(11, "Numer jest za długi."),
-  birthDate: z.date("Wskazać datę."),
-})
+import { formSchema } from "./schema.client"
+import { useMutation } from "@tanstack/react-query"
+import { verifyUserRequest } from "@/lib/api/verify"
 
 export default function LicenseForm() {
+  const verifyMutation = useMutation({
+    mutationFn: verifyUserRequest,
+      onSuccess: (data) => {
+    console.log('Server response:', data)
+  },
+
+  onError: (error) => {
+    console.error('Verification error:', error)
+  },
+  })
+
   const form = useForm({
     defaultValues: {
       license: undefined as string | undefined,
@@ -41,8 +45,9 @@ export default function LicenseForm() {
     },
     
     onSubmit: async ({ value }) => {
-      console.log(value)
-    }
+  const parsed = formSchema.parse(value)
+  verifyMutation.mutate(parsed)
+}
   })
 
   return (
@@ -115,6 +120,20 @@ export default function LicenseForm() {
       />
 
       <Button type="submit">Szukaj</Button>
+      {verifyMutation.isPending && <p className="pt-5">Kontrola...</p>}
+
+{verifyMutation.isError && (
+  <p className="pt-5 text-red-500">
+    Nie znaleziono licencji.
+  </p>
+)}
+
+{verifyMutation.isSuccess && verifyMutation.data.success && (
+  <p className="pt-5 text-green-500">
+    Znaleziono licencję.
+  </p>
+)}
+
     </form>
     </CardContent>
     </Card>
