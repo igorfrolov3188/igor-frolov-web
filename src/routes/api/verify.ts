@@ -103,7 +103,7 @@ export const Route = createFileRoute('/api/verify')({
       .select('*')
       .eq('number', license)
       .eq('birth_date', birthDateStr)
-      .single()
+      .maybeSingle()
 
     if (error) {
       console.log('[verify] supabase error:', error)
