@@ -103,7 +103,7 @@ export const Route = createFileRoute('/api/verify')({
       .select('*')
       .eq('number', license)
       .eq('birth_date', birthDateStr)
-      .maybeSingle()
+      .single()
 
     if (error) {
       console.log('[verify] supabase error:', error)
@@ -112,6 +112,13 @@ export const Route = createFileRoute('/api/verify')({
         { status: 404 }
       )
     }
+
+    if (!data) {
+  return json(
+    { success: false, message: 'Not found' },
+    { status: 404 }
+  )
+}
 
     return json({ success: true, data })
   } catch (err) {
